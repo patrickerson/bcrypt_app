@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bcrypt/flutter_bcrypt.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 import 'home_controller.dart';
@@ -7,21 +8,32 @@ import 'home_controller.dart';
 class HomePage extends StatelessWidget {
 
   HomeController controller = new HomeController();
+  String salt;
+  String result;
+  Widget _cryptButton() {
 
-  Widget _cryptButton(){
-    return Padding(
-    padding: EdgeInsets.all(40),
-        child: RaisedButton(
-          color: Colors.blue,
-          child: Text(
-            "Crypt",
-            style: TextStyle(color: Colors.white),
-          ),
-          onPressed: (){
-            //TODO: crypt
-          },
+    return Observer(
 
-    ));
+        builder: (_){
+          return Padding(
+            padding: EdgeInsets.all(40),
+            child: RaisedButton(
+            color: Colors.blue,
+              child: Text(
+                "Crypt",
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: (){
+                Future<String> hash = FlutterBcrypt.hashPw(
+                    password: controller.model.encrypt,
+                    salt: salt);
+              hash.then((value) => controller.model.decrypt = value);
+              }
+          )
+          );
+        }
+        );
+
   }
   Widget _textInput({String labelText, String hintText, void Function(String) onChanged }){
     return Observer(
@@ -35,36 +47,52 @@ class HomePage extends StatelessWidget {
           labelText: labelText,
           hintText: hintText,
           border: OutlineInputBorder(),
-      ),
-      ));}
-    );
+           ),
+          )
+        );
+      });
   }
 
   @override
   Widget build(BuildContext context) {
+
+    salt = r'$2b$06$C6UzMDM.H6dfI/f/IKxGhu';
+    result = "";
+
+
     return Scaffold(
       appBar: AppBar(
         title: Text("BCrypt"),
       ),
-      body: Column(
+      body: SingleChildScrollView(child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
+          Text("Encrypt: "),
           Observer(
               builder: (_){
-                return Text("encrypt: ${controller.encrypt} \ndecrypt: ${controller.decrypt}");
+                return Text("${controller.model.encrypt}", textAlign: TextAlign.center,);
 
               }),
+          Text("Salt:"),
+          Observer(
+              builder: (_){
+                return Text(salt);
+
+              }),
+          Text("Result"),
+      Observer(
+          builder: (_){return Text(controller.model.decrypt, textAlign: TextAlign.center,);}),
           _textInput(
               labelText: "Encrypt",
-              hintText: controller.decrypt,
-              onChanged: controller.setEncrypt,
+              hintText: controller.model.decrypt,
+              onChanged: controller.model.setEncrypt,
 
           ),
           _textInput(
               labelText: "Decrypt",
-              hintText: controller.encrypt,
-              onChanged: controller.setDecrypt,
+              hintText: controller.model.encrypt,
+              onChanged: controller.model.setDecrypt,
           ),
 
           _cryptButton(),
@@ -74,7 +102,7 @@ class HomePage extends StatelessWidget {
 
 
         ],
-      ),
+      ),)
     );
 
   }

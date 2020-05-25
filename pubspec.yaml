@@ -21,10 +21,12 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  flutter_bcrypt: ^1.0.5
   flutter:
     sdk: flutter
   mobx:
   flutter_mobx:
+  rxdart: ^0.23.1
 
 
   # The following adds the Cupertino Icons font to your application.
