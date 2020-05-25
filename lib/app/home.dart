@@ -9,25 +9,20 @@ class HomePage extends StatelessWidget {
 
   HomeController controller = new HomeController();
   String result;
-  Widget _cryptButton() {
+  Widget _cryptButton({String text, void Function() onPressed}) {
 
     return Observer(
 
         builder: (_){
           return Padding(
-            padding: EdgeInsets.all(40),
+            padding: EdgeInsets.all(5),
             child: RaisedButton(
-            color: Colors.blue,
+            color: controller.model.color,
               child: Text(
-                "Crypt",
+                text,
                 style: TextStyle(color: Colors.white),
               ),
-              onPressed: (){
-                Future<String> hash = FlutterBcrypt.hashPw(
-                    password: controller.model.encrypt,
-                    salt: controller.model.salt);
-              hash.then((value) => controller.model.decrypt = value);
-              }
+              onPressed: onPressed
           )
           );
         }
@@ -60,13 +55,15 @@ class HomePage extends StatelessWidget {
 
     result = "";
 
-
-    return Scaffold(
+    return Observer(
+     builder: (_){return Scaffold(
       appBar: AppBar(
         title: Text("BCrypt"),
+        backgroundColor: controller.model.color,
       ),
+
       body: SingleChildScrollView(child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
           Text("Encrypt: "),
@@ -91,20 +88,42 @@ class HomePage extends StatelessWidget {
 
           ),
           _textInput(
-              labelText: "Decrypt",
-              hintText: controller.model.encrypt,
+              labelText: "hash",
+              hintText: controller.model.decrypt,
               onChanged: controller.model.setDecrypt,
           ),
 
-          _cryptButton(),
+          _cryptButton(
+            text: "Crypt",
+            onPressed: (){
+              Future<String> hash = FlutterBcrypt.hashPw(
+                  password: controller.model.encrypt,
+                  salt: controller.model.salt);
+              hash.then((value) => controller.model.decrypt = value);
+
+            }
+          ),
+
+          _cryptButton(
+            text: "verify",
+            onPressed: (){
+              Future<bool> verify = FlutterBcrypt.verify(
+                  password: controller.model.encrypt, hash: controller.model.decrypt);
 
 
+              verify.then((value){if(value){
+                print("ok");
+                controller.model.color = Colors.green;}
+                else{print("failed"); controller.model.color = Colors.red;}
+              });
+            }
+          )
 
 
 
         ],
       ),)
-    );
+    );});
 
   }
 }

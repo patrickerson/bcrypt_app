@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 
 part 'text_model.g.dart';
@@ -22,4 +23,9 @@ abstract class _TextModelBase with Store {
   String salt = "";
   @action
   void setSalt(String input) => salt = input;
+
+  @observable
+  Color color = Colors.blue;
+  @action
+  void setColor(Color nc) => color = nc;
 }
