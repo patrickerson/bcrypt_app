@@ -9,26 +9,30 @@ class HomePage extends StatelessWidget {
   HomeController controller = new HomeController();
 
   Widget _cryptButton(){
-    return RaisedButton(
+    return Padding(
+    padding: EdgeInsets.all(40),
+        child: RaisedButton(
       onPressed: (){
         //TODO: cript
       },
       color: Colors.blue,
       child: Text("Crypt", style: TextStyle(color: Colors.white),),
-    );
+    ));
   }
   Widget _textInput({String labelText, String hintText, void Function(String) onChanged }){
     return Observer(
       builder: (_){
 
-        return TextField(
+        return Padding(
+        padding: EdgeInsets.all(20),
+            child: TextField(
           onChanged: onChanged,
           decoration: InputDecoration(
           labelText: labelText,
           hintText: hintText,
           border: OutlineInputBorder(),
       ),
-      );}
+      ));}
     );
   }
 
@@ -52,7 +56,9 @@ class HomePage extends StatelessWidget {
               labelText: "Decrypt",
               hintText: controller.encrypt,
               onChanged: controller.setDecrypt,
-          )
+          ),
+
+          _cryptButton()
 
 
         ],
