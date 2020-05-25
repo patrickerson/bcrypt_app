@@ -8,7 +8,6 @@ import 'home_controller.dart';
 class HomePage extends StatelessWidget {
 
   HomeController controller = new HomeController();
-  String salt;
   String result;
   Widget _cryptButton() {
 
@@ -26,7 +25,7 @@ class HomePage extends StatelessWidget {
               onPressed: (){
                 Future<String> hash = FlutterBcrypt.hashPw(
                     password: controller.model.encrypt,
-                    salt: salt);
+                    salt: controller.model.salt);
               hash.then((value) => controller.model.decrypt = value);
               }
           )
@@ -56,7 +55,9 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    salt = r'$2b$06$C6UzMDM.H6dfI/f/IKxGhu';
+    Future<String> saltFuture = FlutterBcrypt.salt();
+    saltFuture.then((value) => controller.model.salt = value);
+
     result = "";
 
 
@@ -77,7 +78,7 @@ class HomePage extends StatelessWidget {
           Text("Salt:"),
           Observer(
               builder: (_){
-                return Text(salt);
+                return Text(controller.model.salt);
 
               }),
           Text("Result"),

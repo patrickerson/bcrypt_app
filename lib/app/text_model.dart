@@ -17,4 +17,9 @@ abstract class _TextModelBase with Store {
   String decrypt = "";
   @action
   void setDecrypt(String input) => decrypt = input;
+
+  @observable
+  String salt = "";
+  @action
+  void setSalt(String input) => salt = input;
 }
