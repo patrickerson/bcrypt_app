@@ -83,7 +83,7 @@ class HomePage extends StatelessWidget {
           builder: (_){return Text(controller.model.decrypt, textAlign: TextAlign.center,);}),
           _textInput(
               labelText: "Encrypt",
-              hintText: controller.model.decrypt,
+              hintText: controller.model.encrypt,
               onChanged: controller.model.setEncrypt,
 
           ),
