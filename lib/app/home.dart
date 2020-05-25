@@ -12,11 +12,15 @@ class HomePage extends StatelessWidget {
     return Padding(
     padding: EdgeInsets.all(40),
         child: RaisedButton(
-      onPressed: (){
-        //TODO: cript
-      },
-      color: Colors.blue,
-      child: Text("Crypt", style: TextStyle(color: Colors.white),),
+          color: Colors.blue,
+          child: Text(
+            "Crypt",
+            style: TextStyle(color: Colors.white),
+          ),
+          onPressed: (){
+            //TODO: crypt
+          },
+
     ));
   }
   Widget _textInput({String labelText, String hintText, void Function(String) onChanged }){
@@ -46,11 +50,16 @@ class HomePage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
+          Observer(
+              builder: (_){
+                return Text("encrypt: ${controller.encrypt} \ndecrypt: ${controller.decrypt}");
 
+              }),
           _textInput(
               labelText: "Encrypt",
               hintText: controller.decrypt,
               onChanged: controller.setEncrypt,
+
           ),
           _textInput(
               labelText: "Decrypt",
@@ -58,7 +67,10 @@ class HomePage extends StatelessWidget {
               onChanged: controller.setDecrypt,
           ),
 
-          _cryptButton()
+          _cryptButton(),
+
+
+
 
 
         ],
