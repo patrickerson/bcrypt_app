@@ -100,6 +100,7 @@ class HomePage extends StatelessWidget {
                   password: controller.model.encrypt,
                   salt: controller.model.salt);
               hash.then((value) => controller.model.decrypt = value);
+              print(controller.model.decrypt);
 
             }
           ),
